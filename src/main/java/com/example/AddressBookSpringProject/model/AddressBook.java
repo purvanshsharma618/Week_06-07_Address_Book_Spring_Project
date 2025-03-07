@@ -1,3 +1,4 @@
+
 package com.example.AddressBookSpringProject.model;
 
 import jakarta.validation.constraints.NotEmpty;
