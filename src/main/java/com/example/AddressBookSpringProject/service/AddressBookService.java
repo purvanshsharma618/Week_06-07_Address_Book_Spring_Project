@@ -2,7 +2,6 @@ package com.example.AddressBookSpringProject.service;
 
 import com.example.AddressBookSpringProject.model.AddressBook;
 
-import com.example.AddressBookSpringProject.model.AddressBook;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
