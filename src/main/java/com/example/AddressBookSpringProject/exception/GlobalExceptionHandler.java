@@ -1,6 +1,5 @@
 package com.example.AddressBookSpringProject.exception;
 
-
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.FieldError;
@@ -33,5 +32,12 @@ public class GlobalExceptionHandler {
         errorResponse.put("error", ex.getMessage());
         return new ResponseEntity<>(errorResponse, HttpStatus.INTERNAL_SERVER_ERROR);
     }
-}
 
+    // Handle AddressBook ID not found exception
+    @ExceptionHandler(AddressBookException.class)
+    public ResponseEntity<Map<String, String>> handleAddressBookException(AddressBookException ex) {
+        Map<String, String> errorResponse = new HashMap<>();
+        errorResponse.put("error", ex.getMessage());
+        return new ResponseEntity<>(errorResponse, HttpStatus.NOT_FOUND);
+    }
+}
