@@ -1,5 +1,7 @@
 package com.example.AddressBookSpringProject.controller;
 
+import com.example.AddressBookSpringProject.dto.AddressBookDTO;
+import com.example.AddressBookSpringProject.model.AddressBook;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -10,36 +12,38 @@ import java.util.List;
 @RequestMapping("/addressbook") // Base URL
 public class AddressBookController {
 
-    private List<String> addressBooks = new ArrayList<>();
+    private List<AddressBook> addressBooks = new ArrayList<>();
+    private Long idCounter = 1L;
 
     // GET request to fetch all address books
     @GetMapping
-    public ResponseEntity<List<String>> getAddressBooks() {
+    public ResponseEntity<List<AddressBook>> getAddressBooks() {
         return ResponseEntity.ok(addressBooks);
     }
 
     // GET request to fetch an address book by ID
     @GetMapping("/{id}")
-    public ResponseEntity<String> getAddressById(@PathVariable int id) {
-        if (id >= 0 && id < addressBooks.size()) {
-            return ResponseEntity.ok("Address Book found: " + addressBooks.get(id));
-        } else {
-            return ResponseEntity.notFound().build();
-        }
+    public ResponseEntity<AddressBook> getAddressById(@PathVariable Long id) {
+        return addressBooks.stream()
+                .filter(book -> book.getId().equals(id))
+                .findFirst()
+                .map(ResponseEntity::ok)
+                .orElse(ResponseEntity.notFound().build());
     }
 
     // POST request to create a new address book entry
     @PostMapping("/create")
-    public ResponseEntity<String> addAddressBook(@RequestParam String name, @RequestParam String address) {
-        addressBooks.add(name + " - " + address);
-        return ResponseEntity.ok("Address Book name: " + name + " is created with address: " + address);
+    public ResponseEntity<AddressBook> addAddressBook(@RequestBody AddressBookDTO addressBookDTO) {
+        AddressBook newAddressBook = new AddressBook(idCounter++, addressBookDTO.getName(), addressBookDTO.getAddress());
+        addressBooks.add(newAddressBook);
+        return ResponseEntity.ok(newAddressBook);
     }
 
     // DELETE request to remove an address book by ID
     @DeleteMapping("/delete/{id}")
-    public ResponseEntity<String> addressBookDeleteById(@PathVariable int id) {
-        if (id >= 0 && id < addressBooks.size()) {
-            addressBooks.remove(id);
+    public ResponseEntity<String> addressBookDeleteById(@PathVariable Long id) {
+        boolean removed = addressBooks.removeIf(book -> book.getId().equals(id));
+        if (removed) {
             return ResponseEntity.ok("Address book with ID: " + id + " is deleted");
         } else {
             return ResponseEntity.notFound().build();
@@ -48,13 +52,14 @@ public class AddressBookController {
 
     // PUT request to update an existing address book entry
     @PutMapping("/update/{id}")
-    public ResponseEntity<String> updateAddressBook(@PathVariable int id, @RequestParam String name, @RequestParam String address) {
-        if (id >= 0 && id < addressBooks.size()) {
-            addressBooks.set(id, name + " - " + address);
-            return ResponseEntity.ok("Address Book with ID: " + id + " is updated.");
-        } else {
-            return ResponseEntity.notFound().build();
+    public ResponseEntity<AddressBook> updateAddressBook(@PathVariable Long id, @RequestBody AddressBookDTO addressBookDTO) {
+        for (AddressBook book : addressBooks) {
+            if (book.getId().equals(id)) {
+                book.setName(addressBookDTO.getName());
+                book.setAddress(addressBookDTO.getAddress());
+                return ResponseEntity.ok(book);
+            }
         }
+        return ResponseEntity.notFound().build();
     }
 }
-
