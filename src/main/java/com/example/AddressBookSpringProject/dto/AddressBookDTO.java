@@ -3,6 +3,7 @@ package com.example.AddressBookSpringProject.dto;
 import lombok.Data;
 @Data
 public class AddressBookDTO {
+
     private String name;
     private String address;
 
@@ -13,3 +14,5 @@ public class AddressBookDTO {
         this.address = address;
     }
 }
+
+

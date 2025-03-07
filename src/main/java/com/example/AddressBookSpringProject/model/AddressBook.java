@@ -1,8 +1,12 @@
 package com.example.AddressBookSpringProject.model;
 
+import jakarta.validation.constraints.NotEmpty;
+import jakarta.validation.constraints.Pattern;
 
 public class AddressBook {
     private Long id;
+    @NotEmpty(message="name can not be empty")
+    @Pattern(regexp = "^[A-Z][a-z]{2,}" ,  message = "Name must start with a capital letter and have at least 3 characters")
     private String name;
     private String address;
 
@@ -38,4 +42,3 @@ public class AddressBook {
         this.address = address;
     }
 }
-
