@@ -8,6 +8,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
+@Slf4j
 @Service
 public class AddressBookService {
 
@@ -18,11 +19,13 @@ public class AddressBookService {
 
     // Fetch all address books
     public List<AddressBook> getAllAddressBooks() {
+        log.info("Fetching all address books. Total count: {}", addressBooks.size());
         return addressBooks;
     }
 
     // Fetch address book by ID
     public Optional<AddressBook> getAddressBookById(Long id) {
+        log.info("Fetching address book with ID: {}", id);
         return addressBooks.stream()
                 .filter(book -> book.getId().equals(id))
                 .findFirst();
@@ -37,6 +40,7 @@ public class AddressBookService {
 
     // Update existing address book
     public Optional<AddressBook> updateAddressBook(Long id, AddressBook updatedBook) {
+        log.info("Updating an Address Book with ID :{}", id);
         Optional<AddressBook> existingBook = getAddressBookById(id);
         existingBook.ifPresent(book -> {
             book.setName(updatedBook.getName());
@@ -47,6 +51,7 @@ public class AddressBookService {
 
     // Delete address book by ID
     public boolean deleteAddressBook(Long id) {
+        log.info("Deleting address book with ID: {}", id);
         return addressBooks.removeIf(book -> book.getId().equals(id));
     }
 }
