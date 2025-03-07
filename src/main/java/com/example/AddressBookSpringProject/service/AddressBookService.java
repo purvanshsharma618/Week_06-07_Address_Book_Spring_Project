@@ -4,6 +4,7 @@ import com.example.AddressBookSpringProject.model.AddressBook;
 
 import com.example.AddressBookSpringProject.model.AddressBook;
 import org.springframework.stereotype.Service;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -11,6 +12,7 @@ import java.util.Optional;
 @Service
 public class AddressBookService {
 
+    // List used to store data in Memory
     private final List<AddressBook> addressBooks = new ArrayList<>();
     // To generate unique IDs
     private Long idCounter = 1L;
@@ -49,4 +51,3 @@ public class AddressBookService {
         return addressBooks.removeIf(book -> book.getId().equals(id));
     }
 }
-
